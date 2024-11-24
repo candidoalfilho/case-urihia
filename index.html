@@ -24,7 +24,7 @@
             color: #ffdd57 !important;
         }
         .hero-section {
-            background: url('./assets/images/carrossel3.jpg') no-repeat center center;
+            background: url('./assets/images/carrossel1.jpg') no-repeat center center;
             background-size: cover;
             color: seashell;
             padding: 80px 0;
@@ -227,6 +227,42 @@
     align-items: center;
 }
 
+/* Basic styling for the carousel */
+.carousel2-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel2 {
+    height: 600px;
+
+  display: flex;
+  animation: scroll 20s linear infinite;
+}
+
+.carousel2-item {
+  min-width: 40%;
+  transition: transform 1s ease;
+}
+
+.carousel2-item img {
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Keyframes for the sliding effect */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+
 
     </style>
 </head>
@@ -292,8 +328,36 @@
     </div>
 </section>
 
-<!-- Estatísticas -->
-<section id="estatisticas" class="py-5 bg-light">
+<section id="image-carousel2" class="py-5">
+    <div class="container">
+      <div class="carousel2-wrapper">
+        <div class="carousel2">
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto1.png" alt="Image 1">
+          </div>
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto2.png" alt="Image 2">
+          </div>
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto3.png" alt="Image 3">
+          </div>
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto4.png" alt="Image 4">
+          </div>
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto5.png" alt="Image 5">
+          </div>
+          <div class="carousel2-item">
+            <img src="assets/images/relatoriodeimpacto/impacto6.png" alt="Image 6">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+
+  <section id="estatisticas" class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-4">Estatísticas do Projeto</h2>
         <div class="row text-center statistics">
@@ -311,11 +375,48 @@
             </div>
             <div class="col-md-3">
                 <h5>Relatório de impacto</h5>
-                <img id="impactReport" height="150" src="https://imgv2-2-f.scribdassets.com/img/document/367125524/original/6f0e4767ca/1616515418?v=1" alt="Relatório de Impacto">
+                <!-- Mini PDF Viewer -->
+                <iframe id="impactReport" src="./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf" width="100%" height="150" style="border:none;" onclick="expandPDF()"></iframe>
+                <p><a href="javascript:void(0);" onclick="expandPDF()">Clique aqui para ler o relatório completo</a></p>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Full PDF Modal -->
+<div id="pdfModal" style="display:none;">
+    <div style="position:fixed; top:50%; left:50%; transform: translate(-50%, -50%); background-color:white; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); z-index: 1001;">
+        <h3>Relatório Completo</h3>
+        <iframe id="fullPDF" src="./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf" width="800" height="600" style="border:none;"></iframe>
+        <button onclick="closePDF()">Fechar</button>
+    </div>
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5); z-index: 1000;" onclick="closePDF()"></div>
+</div>
+
+<script>
+    function expandPDF() {
+        // Open the full PDF in a modal
+        var modal = document.getElementById('pdfModal');
+        var iframe = document.getElementById('fullPDF');
+        
+        // Set the source to your local PDF
+        iframe.src = "./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf";
+        
+        // Show the modal
+        modal.style.display = "block";
+    }
+
+    function closePDF() {
+        // Close the modal and stop the PDF playback
+        var modal = document.getElementById('pdfModal');
+        var iframe = document.getElementById('fullPDF');
+        
+        modal.style.display = "none";
+        iframe.src = "";
+    }
+</script>
+
+
 
 <!-- Modal de Tela Cheia -->
 <div id="fullscreenModal" class="fullscreen-modal">

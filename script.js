@@ -3,6 +3,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const indicators = document.querySelectorAll(".carousel-indicator");
     let currentIndex = 0;
 
+    // JavaScript for ensuring the infinite scrolling effect
+    const carousel2 = document.querySelector('.carousel2');
+    const items = document.querySelectorAll('.carousel2-item');
+
+    // Clone the first item and append it to the end to create the infinite loop effect
+    const firstItemClone = items[0].cloneNode(true);
+    carousel2.appendChild(firstItemClone);
+
+    // Adjust the animation to allow for infinite loop
+    carousel2.addEventListener('animationiteration', () => {
+    carousel2.appendChild(items[0]); // Move the first item to the end of the carousel
+    });
+
+
     // Função para ativar o item atual do carrossel
     function activateCarouselItem() {
         carouselItems.forEach((item, index) => {
