@@ -265,6 +265,8 @@
 
 
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+
 </head>
 <body>
 
@@ -375,45 +377,73 @@
             </div>
             <div class="col-md-3">
                 <h5>Relatório de impacto</h5>
-                <!-- Mini PDF Viewer -->
-                <iframe id="impactReport" src="./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf" width="100%" height="150" style="border:none;" onclick="expandPDF()"></iframe>
+                <!-- Display the first page of the PDF -->
+                <canvas id="pdfCanvas" style="border:none;"></canvas>
                 <p><a href="javascript:void(0);" onclick="expandPDF()">Clique aqui para ler o relatório completo</a></p>
             </div>
         </div>
     </div>
 </section>
 
+<!-- Full PDF Modal -->
 <div id="pdfModal" style="display:none;">
     <div style="position:fixed; top:50%; left:50%; transform: translate(-50%, -50%); background-color:white; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); z-index: 1001; max-width: 90%; width: 800px;">
         <h3>Relatório Completo</h3>
-        <iframe id="fullPDF" src="./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf" width="100%" height="600" style="border:none;"></iframe>
+        <iframe id="fullPDF" src="" width="100%" height="600" style="border:none;"></iframe>
         <button onclick="closePDF()" style="padding:10px 20px; background-color:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">Fechar</button>
     </div>
     <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5); z-index: 1000;" onclick="closePDF()"></div>
 </div>
 
 <script>
+    // Path to your local PDF file
+    const pdfPath = "./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf";
+    
+    // Load and render the first page on the mini PDF viewer (canvas)
+    function loadPDF(pageNum, canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+
+        pdfjsLib.getDocument(pdfPath).promise.then(pdfDoc => {
+            pdfDoc.getPage(pageNum).then(page => {
+                const viewport = page.getViewport({ scale: 0.5 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                });
+            });
+        });
+    }
+
+    // Expand PDF in the modal
     function expandPDF() {
-        // Open the full PDF in a modal
         var modal = document.getElementById('pdfModal');
         var iframe = document.getElementById('fullPDF');
         
-        // Set the source to your local PDF
-        iframe.src = "./assets/pdfs/Relatorio de Impacto - Bemol & Urihia.pdf";
+        // Set the source of the iframe to your PDF
+        iframe.src = pdfPath;
         
         // Show the modal
         modal.style.display = "block";
     }
 
+    // Close the PDF modal
     function closePDF() {
-        // Close the modal and stop the PDF playback
         var modal = document.getElementById('pdfModal');
         var iframe = document.getElementById('fullPDF');
         
         modal.style.display = "none";
-        iframe.src = "";
+        iframe.src = "";  // Reset iframe source to stop playback
     }
+
+    // Load the first page on the mini viewer (canvas) when the page loads
+    window.onload = function() {
+        loadPDF(1, 'pdfCanvas');
+    };
 </script>
+
 
 
 
