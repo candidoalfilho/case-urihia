@@ -168,6 +168,66 @@
         background-color: #f1f1f1;
     }
 
+    /* Adiciona um efeito de zoom na imagem */
+.img-zoom {
+    transition: transform 0.3s ease; /* Transição suave */
+    cursor: pointer; /* Cursor indicando que é interativo */
+}
+
+.img-zoom.zoomed {
+    transform: scale(2); /* Aumenta o tamanho da imagem */
+    z-index: 10; /* Garante que a imagem ampliada fique acima de outros elementos */
+}
+
+/* Estilo para o Modal de Tela Cheia */
+.fullscreen-modal {
+    display: none;  /* Inicialmente oculto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.fullscreen-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1010;
+}
+
+.close-btn:hover {
+    color: #f1f1f1;
+}
+
+#impactReport{
+    border: 1px solid gray;
+}
+
+#impactReport:hover{
+    cursor: pointer;
+}
+
+.statistics{
+    align-items: center;
+}
+
+
     </style>
 </head>
 <body>
@@ -236,22 +296,33 @@
 <section id="estatisticas" class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-4">Estatísticas do Projeto</h2>
-        <div class="row text-center">
-            <div class="col-md-4">
-                <h3>+10.000</h3>
-                <p>Árvores plantadas</p>
+        <div class="row text-center statistics">
+            <div class="col-md-3">
+                <h3>35</h3>
+                <p>Hectares reflorestados no projeto</p>
             </div>
-            <div class="col-md-4">
-                <h3>+50</h3>
-                <p>Comunidades atendidas</p>
+            <div class="col-md-3">
+                <h3>3x</h3>
+                <p>Aumento da renda média das famílias</p>
             </div>
-            <div class="col-md-4">
-                <h3>100%</h3>
-                <p>Sucesso nas parcerias locais</p>
+            <div class="col-md-3">
+                <h3>462</h3>
+                <p>Toneladas de CO₂ capturadas por ano</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Relatório de impacto</h5>
+                <img id="impactReport" height="150" src="https://imgv2-2-f.scribdassets.com/img/document/367125524/original/6f0e4767ca/1616515418?v=1" alt="Relatório de Impacto">
             </div>
         </div>
     </div>
 </section>
+
+<!-- Modal de Tela Cheia -->
+<div id="fullscreenModal" class="fullscreen-modal">
+    <span id="closeModal" class="close-btn">&times;</span>
+    <img id="fullscreenImage" class="fullscreen-img" src="" alt="Imagem em Tela Cheia">
+</div>
+
 
 <!-- Como Ajudar -->
 <section id="como-ajudar" class="cta-section text-center">
@@ -290,9 +361,46 @@
                 </div>
             </div>
         </div>
+
+        <!-- Novos Tópicos sobre Doações -->
+        <h2>Doações</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="assets/images/doacao_assinatura.jpg" class="card-img-top" alt="Doação por Assinatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Doação por Assinatura</h5>
+                        <p class="card-text">Seja um doador regular e ajude a garantir a continuidade do nosso trabalho com doações mensais. Sua contribuição contínua é fundamental!</p>
+                        <a href="#doacoes" class="btn btn-primary">Saiba mais</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="assets/images/doacaopontual.jpg" class="card-img-top" alt="Doação Pontual">
+                    <div class="card-body">
+                        <h5 class="card-title">Doação Pontual</h5>
+                        <p class="card-text">Faça uma doação única e imediata para um projeto específico, impactando diretamente a nossa causa. Sua ajuda é muito bem-vinda!</p>
+                        <a href="#doacoes" class="btn btn-primary">Saiba mais</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="assets/images/presentes_solidarios.jpg" class="card-img-top" alt="Presentes Solidários">
+                    <div class="card-body">
+                        <h5 class="card-title">Presentes Solidários</h5>
+                        <p class="card-text">Em vez de um presente tradicional, que tal doar em nome de um amigo ou familiar? Oferecemos presentes solidários que ajudam a fortalecer a nossa causa.</p>
+                        <a href="#presentes" class="btn btn-primary">Saiba mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <a href="#contato" class="cta-button mt-4">Cadastre-se como Voluntário</a>
     </div>
 </section>
+
 
 <!-- Depoimentos -->
 <section id="testemunhos" class="py-5">
@@ -351,3 +459,30 @@
 
 </body>
 </html>
+
+
+<script>
+    // Obtém os elementos
+    const img = document.getElementById('impactReport');
+    const modal = document.getElementById('fullscreenModal');
+    const fullscreenImg = document.getElementById('fullscreenImage');
+    const closeBtn = document.getElementById('closeModal');
+
+    // Quando a imagem for clicada, abre o modal com a imagem
+    img.addEventListener('click', function() {
+        modal.style.display = 'flex';
+        fullscreenImg.src = img.src;  // Define a imagem de tela cheia
+    });
+
+    // Quando o botão de fechar for clicado, fecha o modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Fecha o modal se o usuário clicar fora da imagem
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
